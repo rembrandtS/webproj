@@ -34,15 +34,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
             .logout()
             .logoutUrl("/logout") /* 로그아웃 url*/
-            .logoutSuccessUrl("/account/login") /* 로그아웃 성공시 이동할 url */
-            .invalidateHttpSession(true) /*로그아웃시 세션 제거*/
+            .logoutSuccessUrl("/account/login") /* 로그아웃 성공 시 이동할 url */
+            .invalidateHttpSession(true) /*로그아웃 시 세션 제거*/
             .deleteCookies("JSESSIONID") /*쿠키 제거*/
             .clearAuthentication(true) /*권한정보 제거*/
             .permitAll()
         .and()
             .sessionManagement()
             .maximumSessions(1) /* session 허용 갯수 */
-            .expiredUrl("/account/login") /* session 만료시 이동 페이지*/
+            .expiredUrl("/account/login") /* session 만료 시 이동 페이지*/
             .maxSessionsPreventsLogin(false)
             .sessionRegistry(sessionRegistry());
 
