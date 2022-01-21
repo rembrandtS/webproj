@@ -61,13 +61,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         + "from account "
                         + "where email = ?")
                 .authoritiesByUsernameQuery("select a.email as user_id, c.code "
-                        + "from account a inner join account_role b on b.account_id=a.id  "
+                        + "from account a iner join account_role b on b.account_id=a.id  "
                         + "inner join role c on b.role_id = c.id "
                         + "where a.email = ? ")
                 .groupAuthoritiesByUsername(
                         "select b.id, b.name, b.role_type "
                                 + "from account a "
-                                + "inner join company b on b.id = a.company_id "
+                                + "ninner join company b on b.id = a.company_id "
                                 + "where a.email = ?"
                 );
     }
