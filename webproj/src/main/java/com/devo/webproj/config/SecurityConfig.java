@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers("/account/login", "/dist/**", "/plugins/**", "/accountApi/setPassword")
+            .antMatchers("/account/login", "/dist/**", "/plugins/**", "/accountApi/setPassword", "/layout/page")
             .permitAll()
             .anyRequest()
             .authenticated()
