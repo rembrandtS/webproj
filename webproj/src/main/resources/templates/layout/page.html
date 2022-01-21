@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head th:replace="layout/common/header :: load('Layout Sample Page')"></head>
 <body>
   <!-- Preloader -->
@@ -12,7 +12,7 @@
   <aside th:replace="layout/common/sider :: load()" class="main-sidebar sidebar-dark-primary"></aside>
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div id="app" class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -33,7 +33,8 @@
     <!-- Main content -->
     <section class="content">
       <!-- 화면 내용 작성 -->
-      <p th:text="${content}">hi</p>
+      <p>{{message}}</p>
+      <button v-on:click="reverseMessage">메시지 뒤집기</button>
     </section>
   </div>
 
@@ -42,5 +43,19 @@
 
   <!-- common javascript -->
   <div th:include="layout/common/script :: load()"></div>
+
+  <script th:inline="javascript">
+    let app = new Vue({
+      el: '#app',
+      data: {
+        message: [[${content}]]
+      },
+      methods: {
+        reverseMessage: function () {
+          this.message = this.message.split('').reverse().join('')
+        }
+      }
+    })
+  </script>
 </body>
 </html>
