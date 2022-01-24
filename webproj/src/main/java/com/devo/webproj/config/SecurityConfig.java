@@ -1,5 +1,6 @@
 package com.devo.webproj.config;
 
+import com.devo.webproj.handler.CustomLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,6 +10,8 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -19,21 +22,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private AuthenticationSuccessHandler customSuccessHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler customFailureHandler;
+
+    @Autowired
+    private CustomLogoutSuccessHandler customLogoutSuccessHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers("/account/login", "/dist/**", "/plugins/**", "/accountApi/setPassword", "/layout/page")
+            .antMatchers("/account/login", "/dist/**", "/plugins/**", "/accountApi/setPassword")
             .permitAll()
             .anyRequest()
             .authenticated()
         .and()
             .formLogin()
             .loginPage("/account/login")
+            .successHandler(customSuccessHandler)
+            .failureHandler(customFailureHandler)
             .permitAll()
         .and()
             .logout()
             .logoutUrl("/logout") /* 로그아웃 url*/
+            .logoutSuccessHandler(customLogoutSuccessHandler)
             .logoutSuccessUrl("/account/login") /* 로그아웃 성공 시 이동할 url */
             .invalidateHttpSession(true) /*로그아웃 시 세션 제거*/
             .deleteCookies("JSESSIONID") /*쿠키 제거*/
@@ -61,13 +76,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         + "from account "
                         + "where email = ?")
                 .authoritiesByUsernameQuery("select a.email as user_id, c.code "
-                        + "from account a iner join account_role b on b.account_id=a.id  "
+                        + "from account a inner join account_role b on b.account_id=a.id  "
                         + "inner join role c on b.role_id = c.id "
                         + "where a.email = ? ")
                 .groupAuthoritiesByUsername(
                         "select b.id, b.name, b.role_type "
                                 + "from account a "
-                                + "ninner join company b on b.id = a.company_id "
+                                + "inner join company b on b.id = a.company_id "
                                 + "where a.email = ?"
                 );
     }
