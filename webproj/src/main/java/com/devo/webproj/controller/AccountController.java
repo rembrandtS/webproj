@@ -1,5 +1,7 @@
 package com.devo.webproj.controller;
 
+import com.devo.webproj.model.vo.SearchAccountVO;
+import com.devo.webproj.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -14,8 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class AccountController {
 
+    private final AccountService accountService;
+
     @GetMapping("/login")
     public String login() {
         return "account/login";
+    }
+
+    @GetMapping("/userList")
+    public String userList(SearchAccountVO searchAccountVO, Model model) {
+        model.addAttribute("accounts", accountService.findAccountDTOsBySearchCondition(searchAccountVO));
+        return "account/userList/page";
     }
 }

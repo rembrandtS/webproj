@@ -26,7 +26,6 @@ public class AccountDslRepository {
                 .select(Projections.constructor(AccountDTO.class, account))
                 .distinct()
                 .from(account)
-                .join(account.roles, role)
                 .join(account.company, company)
                 .where(
                     getWhereCompanyNameLike(searchAccountVO.getCompanyName()),
@@ -37,7 +36,7 @@ public class AccountDslRepository {
     }
 
     private BooleanExpression getWhereCompanyNameLike(String companyName) {
-        if (!StringUtils.isEmpty(companyName))  return account.userName.containsIgnoreCase(companyName);
+        if (!StringUtils.isEmpty(companyName))  return account.company.name.containsIgnoreCase(companyName);
         return null;
     }
 
