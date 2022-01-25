@@ -1,5 +1,6 @@
 package com.devo.webproj.controller;
 
+import com.devo.webproj.model.dto.AccountDTO;
 import com.devo.webproj.model.vo.SearchAccountVO;
 import com.devo.webproj.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,15 @@ public class AccountController {
         return "account/login";
     }
 
-    @GetMapping("/userList")
+    @GetMapping("/accounts")
     public String userList(SearchAccountVO searchAccountVO, Model model) {
         model.addAttribute("accounts", accountService.findAccountDTOsBySearchCondition(searchAccountVO));
-        return "account/userList/page";
+        return "account/list/page";
+    }
+
+    @GetMapping("/account")
+    public String item(Model model) {
+        model.addAttribute("account", new AccountDTO());
+        return "account/item/page";
     }
 }

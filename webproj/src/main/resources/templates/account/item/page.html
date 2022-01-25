@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head th:replace="layout/common/header :: load('사용자 등록')"></head>
+<body>
+<!-- Preloader -->
+<div th:replace="layout/common/preloader :: load()"
+     class="preloader flex-column justify-content-center align-items-center"></div>
+
+<!-- Navbar -->
+<nav th:replace="layout/common/navigator :: load()"
+     class="main-header navbar navbar-expand navbar-white navbar-light"></nav>
+
+<!-- Main Sidebar Container -->
+<aside th:replace="layout/common/sider :: load()" class="main-sidebar sidebar-dark-primary"></aside>
+
+<!-- Content Wrapper. Contains page content -->
+<div id="app" class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">사용자 등록</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">홈</a></li>
+                        <li class="breadcrumb-item active">사용자 등록</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">검색 조건</h3>
+
+                            <div class="card-tools">
+                                <div class="input-group input-group-sm" style="width: 150px;">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-default" v-on:click="save">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover text-nowrap">
+                                <tbody>
+                                <tr>
+                                    <th>이메일</th>
+                                    <td><input type="email" v-model="account.email" placeholder="이메일을 입력하세요">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>회사</th>
+                                    <td>
+                                        <select v-model="account.companyId">
+                                            <option v-for="company in companies" v-bind:value="company.value">
+                                                {{ company.text }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>이름</th>
+                                    <td><input v-model="account.userName" placeholder="이름을 입력하세요"></td>
+                                </tr>
+                                <tr>
+                                    <th>전화</th>
+                                    <td><input v-model="account.phoneNo" placeholder="연락처를 입력하세요"></td>
+                                </tr>
+                                <tr>
+                                    <th>모바일</th>
+                                    <td><input v-model="account.mobileNo" placeholder="휴대전화 번호를 입력하세요"></td>
+                                </tr>
+                                <tr>
+                                    <th>주소</th>
+                                    <td><input v-model="account.address" placeholder="주소를 입력하세요"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Main footer -->
+<footer th:replace="layout/common/footer :: load()" class="main-footer"></footer>
+
+<!-- common javascript -->
+<div th:include="layout/common/script :: load()"></div>
+
+<script th:inline="javascript">
+    let saveAccount = function () {
+        axiosPost('/accountApi/account'
+            , this.account
+            , (res) => this.account = res.data
+        )
+    };
+
+    let app = new Vue({
+        el: '#app',
+        data: {
+            account: [[${account}]],
+            companies: [
+                {text: '(주)디보', value: 1},
+                {text: 'maver corp.', value: 2},
+                {text: 'cacao corp.', value: 3},
+                {text: 'rexon corp.', value: 4}
+            ]
+        },
+        methods: {
+            save: saveAccount
+        }
+    })
+</script>
+</body>
+</html>

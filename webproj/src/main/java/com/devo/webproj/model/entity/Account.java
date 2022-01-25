@@ -1,5 +1,6 @@
 package com.devo.webproj.model.entity;
 
+import com.devo.webproj.model.vo.AccountVO;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -45,7 +46,25 @@ public class Account {
     )
     private List<Role> roles = new ArrayList<>();
 
+    public Account() {
+
+    }
+
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Account (AccountVO accountVO)
+    {
+        this.email = accountVO.getEmail();
+        this.company = new Company(accountVO.getCompanyId());
+        this.userName = accountVO.getUserName();
+        this.rank = accountVO.getRank();
+        this.phoneNo = accountVO.getPhoneNo();
+        this.mobileNo = accountVO.getMobileNo();
+        this.address = accountVO.getAddress();
+        this.photoPath = accountVO.getPhotoPath();
+        this.enabled = 1;
+        this.password = "admin4321!";
     }
 }

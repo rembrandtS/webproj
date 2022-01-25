@@ -31,11 +31,9 @@ let axiosGet = function (url, params, doneFn, failFn) {
   );
 }
 
-let axiosPost = function (url, params, doneFn, failFn) {
+let axiosPost = function (url, jsonData, doneFn, failFn) {
   axiosResponse(
-    axios.post(url, {
-      params: params
-    })
+    axios.post(url, JSON.stringify(jsonData),{ headers: { 'Content-Type': 'application/json' } })
     , doneFn
     , failFn
   );

@@ -12,7 +12,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
-@NoArgsConstructor
 public class Company {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -30,4 +29,12 @@ public class Company {
 
     private long lastModifierId;
     private LocalDateTime lastModifyDate;
+
+    public Company(long id){
+        this.id = id;
+    }
+
+    public Company() {
+
+    }
 }

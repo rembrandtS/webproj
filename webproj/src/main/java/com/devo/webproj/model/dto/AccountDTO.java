@@ -30,4 +30,6 @@ public class AccountDTO {
         this.photoPath = account.getPhotoPath();
         this.enabled = account.getEnabled();
     }
+
+    public AccountDTO(){}
 }
