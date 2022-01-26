@@ -9,7 +9,7 @@ let axiosError = function (error, failFn) {
             alert(`[${error.response.status}]${error.response.message}`);
             window.location.href = '/logout';
         }
-    else if (error.request) console.log(error.request);
+    } else if (error.request) console.log(error.request);
     else console.log('Error', error.message);
 }
 
