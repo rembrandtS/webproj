@@ -2,6 +2,7 @@ package com.devo.webproj.component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +22,10 @@ public class HttpInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws IOException {
 
+        if(!request.isRequestedSessionIdValid()) {
+            response.sendError(900, "세션 만료! 로그인 페이지로 이동합니다.");
+            return false;
+        }
         return true;
     }
 
@@ -29,7 +34,6 @@ public class HttpInterceptor implements HandlerInterceptor {
                            HttpServletResponse response,
                            Object handler,
                            ModelAndView modelAndView) {
-
     }
 
     @Override

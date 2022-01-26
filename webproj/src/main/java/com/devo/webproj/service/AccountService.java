@@ -1,6 +1,5 @@
 package com.devo.webproj.service;
 
-import com.devo.webproj.component.UserInfo;
 import com.devo.webproj.model.dto.AccountDTO;
 import com.devo.webproj.model.entity.Account;
 import com.devo.webproj.model.vo.AccountVO;
@@ -9,10 +8,8 @@ import com.devo.webproj.repository.AccountRepository;
 import com.devo.webproj.repository.dsl.AccountDslRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -20,30 +17,28 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class AccountService extends AbstractService  {
-    private final PasswordEncoder passwordEncoder;
-
     private final AccountRepository accountRepository;
     private final AccountDslRepository accountDslRepository;
 
-//    @Transactional
-//    public void setUserInfo(String email, String sessionId) {
-//        accountRepository
-//                .findByEmail(email)
-//                .map(loginAccount -> userInfo.setUserInfo(loginAccount, sessionId)
-//                ).orElse(userInfo);
-//    }
+    @Transactional
+    public void setUserInfo(String email, String sessionId) {
+        accountRepository
+                .findByEmail(email)
+                .map(loginAccount -> userInfo.setUserInfo(loginAccount, sessionId)
+                ).orElse(userInfo);
+    }
 
     public List<AccountDTO> findAccountDTOsBySearchCondition(SearchAccountVO searchAccountVO) {
         return accountDslRepository.findAccountDTOsBySearchCondition(searchAccountVO);
     }
 
     @Transactional
-    public boolean setPassword(String email, String password)
+    public boolean setPassword(String email, String encodedPassword)
     {
         return accountRepository
                 .findByEmail(email)
                 .map(savedAccount -> {
-                    savedAccount.setPassword(passwordEncoder.encode(password));
+                    savedAccount.setPassword(encodedPassword);
                     return true;
                 })
                 .orElse(false);

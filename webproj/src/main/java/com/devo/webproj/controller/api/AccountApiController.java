@@ -1,10 +1,8 @@
 package com.devo.webproj.controller.api;
 
 import com.devo.webproj.model.dto.AccountDTO;
-import com.devo.webproj.model.entity.Account;
 import com.devo.webproj.model.vo.AccountVO;
 import com.devo.webproj.model.vo.SearchAccountVO;
-import com.devo.webproj.repository.AccountRepository;
 import com.devo.webproj.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,10 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountApiController {
     private final AccountService accountService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/setPassword")
     public String setPassword(String email, String password) {
-        if(accountService.setPassword(email,password)) return "success";
+        if(accountService.setPassword(email,passwordEncoder.encode(password))) return "success";
         return "fail";
     }
 

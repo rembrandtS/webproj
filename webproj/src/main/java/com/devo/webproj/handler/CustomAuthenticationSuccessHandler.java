@@ -28,7 +28,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -56,6 +56,6 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         if (principal instanceof UserDetails) email = ((UserDetails) principal).getUsername();
         else email = principal.toString();
 
-//        accountService.setUserInfo(email, request.getSession().getId());
+        accountService.setUserInfo(email, request.getSession().getId());
     }
 }

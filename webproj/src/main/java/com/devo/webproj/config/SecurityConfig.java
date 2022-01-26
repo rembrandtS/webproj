@@ -1,6 +1,7 @@
 package com.devo.webproj.config;
 
 import com.devo.webproj.handler.CustomLogoutSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,22 +20,15 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+
+@Component
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private DataSource dataSource;
-
-    @Autowired
-    private AuthenticationSuccessHandler customSuccessHandler;
-
-    @Autowired
-    private AuthenticationFailureHandler customFailureHandler;
-
-    @Autowired
-    private CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final DataSource dataSource;
+    private final AuthenticationSuccessHandler customSuccessHandler;
+    private final AuthenticationFailureHandler customFailureHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -97,6 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
     }

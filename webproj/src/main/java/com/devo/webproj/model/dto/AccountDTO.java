@@ -33,7 +33,7 @@ public class AccountDTO {
         this.address = account.getAddress();
         this.photoPath = account.getPhotoPath();
         this.enabled = account.getEnabled();
-        this.editUrl = "/account/edit/" + this.id;
+        this.editUrl = "/account/view/" + this.id;
     }
 
     public AccountDTO(){}
