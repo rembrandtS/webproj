@@ -9,6 +9,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,15 +25,27 @@ public class AccountController {
         return "account/login";
     }
 
-    @GetMapping("/accounts")
-    public String userList(SearchAccountVO searchAccountVO, Model model) {
+    @GetMapping("/list")
+    public String list(SearchAccountVO searchAccountVO, Model model) {
         model.addAttribute("accounts", accountService.findAccountDTOsBySearchCondition(searchAccountVO));
         return "account/list/page";
     }
 
-    @GetMapping("/account")
-    public String item(Model model) {
+    @GetMapping("/view/{id}")
+    public String view(@PathVariable long id, Model model) {
+        model.addAttribute("account", accountService.findById(id));
+        return "account/view/page";
+    }
+
+    @GetMapping("/add")
+    public String add(Model model) {
         model.addAttribute("account", new AccountDTO());
-        return "account/item/page";
+        return "account/add/page";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable long id, Model model) {
+        model.addAttribute("account", accountService.findById(id));
+        return "account/edit/page";
     }
 }

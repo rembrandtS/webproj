@@ -16,29 +16,31 @@ import java.util.List;
 @RequestMapping("/accountApi")
 @RequiredArgsConstructor
 public class AccountApiController {
-    private final AccountRepository accountRepository;
-    private final PasswordEncoder passwordEncoder;
     private final AccountService accountService;
 
     @GetMapping("/setPassword")
     public String setPassword(String email, String password) {
-        accountRepository
-            .findByEmail(email)
-            .map(savedAccount -> {
-                savedAccount.setPassword(passwordEncoder.encode(password));
-                return accountRepository.save(savedAccount);
-            })
-            .orElseGet(Account::new);
-        return "success";
+        if(accountService.setPassword(email,password)) return "success";
+        return "fail";
     }
 
     @GetMapping("/accounts")
-    public List<AccountDTO> accountList(SearchAccountVO searchAccountVO) {
+    public List<AccountDTO> getAccounts(SearchAccountVO searchAccountVO) {
         return accountService.findAccountDTOsBySearchCondition(searchAccountVO);
     }
 
     @PostMapping("/account")
     public AccountDTO postAccount(@RequestBody AccountVO accountVO) {
-        return accountService.postAccount(accountVO);
+        return accountService.saveAccount(accountVO);
+    }
+
+    @PutMapping("/account")
+    public AccountDTO putAccount(@RequestBody AccountVO accountVO) {
+        return accountService.saveAccount(accountVO);
+    }
+
+    @DeleteMapping("/account")
+    public String deleteAccount(@RequestParam long id) {
+        return accountService.deleteAccount(id);
     }
 }

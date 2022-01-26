@@ -39,11 +39,9 @@ let axiosPost = function (url, jsonData, doneFn, failFn) {
   );
 }
 
-let axiosPut = function (url, params, doneFn, failFn) {
+let axiosPut = function (url, jsonData, doneFn, failFn) {
   axiosResponse(
-    axios.put(url, {
-      params: params
-    })
+    axios.put(url, JSON.stringify(jsonData),{ headers: { 'Content-Type': 'application/json' } })
     , doneFn
     , failFn
   );

@@ -1,7 +1,11 @@
 package com.devo.webproj.handler;
 
+import com.devo.webproj.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -23,9 +27,14 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
+    @Autowired
+    AccountService accountService;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 로그인 성공 때 처리 로직 작성
+
+        setUserInfo(request);   // 세션에 로그인 사용자 정보 입력
         setTargetUrl(request, response);
     }
 
@@ -39,5 +48,14 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             else redirectStrategy.sendRedirect(request, response,getDefaultTargetUrl());    // 요청 주소 체계가 틀리면 기본 주소로 리다이렉트
         } else redirectStrategy.sendRedirect(request, response,getDefaultTargetUrl());  // 로그인 전 요청한 주소가 없다면 기본 주소로 리다이렉트
 
+    }
+
+    private void setUserInfo(HttpServletRequest request) {
+        String email;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) email = ((UserDetails) principal).getUsername();
+        else email = principal.toString();
+
+//        accountService.setUserInfo(email, request.getSession().getId());
     }
 }

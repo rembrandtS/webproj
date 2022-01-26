@@ -10,6 +10,7 @@ public class AccountDTO {
     private long id;
     private String email;
     private String companyName;
+    private long companyId;
     private String userName;
     private String rank;
     private String phoneNo;
@@ -18,9 +19,12 @@ public class AccountDTO {
     private String photoPath;
     private Integer enabled;
 
+    private String editUrl;
+
     public AccountDTO(Account account){
         this.id = account.getId();
         this.email = account.getEmail();
+        this.companyId =account.getCompany().getId();
         this.companyName = account.getCompany().getName();
         this.userName = account.getUserName();
         this.rank = account.getRank();
@@ -29,6 +33,7 @@ public class AccountDTO {
         this.address = account.getAddress();
         this.photoPath = account.getPhotoPath();
         this.enabled = account.getEnabled();
+        this.editUrl = "/account/edit/" + this.id;
     }
 
     public AccountDTO(){}

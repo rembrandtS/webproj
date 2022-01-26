@@ -66,5 +66,22 @@ public class Account {
         this.photoPath = accountVO.getPhotoPath();
         this.enabled = 1;
         this.password = "admin4321!";
+        this.writerId = 0;
+        this.writeDate = LocalDateTime.now();
+        this.lastModifyDate = LocalDateTime.now();
+    }
+
+    public Account updateAccount(AccountVO accountVO)
+    {
+        this.company = new Company(accountVO.getCompanyId());
+        this.userName = accountVO.getUserName();
+        this.rank = accountVO.getRank();
+        this.phoneNo = accountVO.getPhoneNo();
+        this.mobileNo = accountVO.getMobileNo();
+        this.address = accountVO.getAddress();
+        this.photoPath = accountVO.getPhotoPath();
+        this.lastModifyDate = LocalDateTime.now();
+
+        return this;
     }
 }

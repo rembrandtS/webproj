@@ -21,13 +21,6 @@ public class HttpInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws IOException {
 
-        HttpSession session = request.getSession();
-
-        if(session.isNew()) {
-            response.sendError(900, "세션이 만료되었습니다.");
-            return false;
-        }
-
         return true;
     }
 

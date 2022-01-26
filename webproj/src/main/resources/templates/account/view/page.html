@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:v-on="http://www.w3.org/1999/xhtml"
+>
+<head th:replace="layout/common/header :: load('사용자 상세')"></head>
+<body>
+<!-- Preloader -->
+<div th:replace="layout/common/preloader :: load()"
+     class="preloader flex-column justify-content-center align-items-center"></div>
+
+<!-- Navbar -->
+<nav th:replace="layout/common/navigator :: load()"
+     class="main-header navbar navbar-expand navbar-white navbar-light"></nav>
+
+<!-- Main Sidebar Container -->
+<aside th:replace="layout/common/sider :: load()" class="main-sidebar sidebar-dark-primary"></aside>
+
+<!-- Content Wrapper. Contains page content -->
+<div id="app" class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">사용자 상세</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">홈</a></li>
+            <li class="breadcrumb-item active">사용자 상세</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <tbody>
+                <tr>
+                  <th>이메일</th>
+                  <td>{{account.email}}</td>
+                </tr>
+                <tr>
+                  <th>회사</th>
+                  <td>{{account.companyName}}</td>
+                </tr>
+                <tr>
+                  <th>이름</th>
+                  <td>{{account.userName}}</td>
+                </tr>
+                <tr>
+                  <th>전화</th>
+                  <td>{{account.phoneNo}}</td>
+                </tr>
+                <tr>
+                  <th>모바일</th>
+                  <td>{{account.mobileNo}}</td>
+                </tr>
+                <tr>
+                  <th>주소</th>
+                  <td>{{account.address}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Main footer -->
+<footer th:replace="layout/common/footer :: load()" class="main-footer"></footer>
+
+<!-- common javascript -->
+<div th:include="layout/common/script :: load()"></div>
+
+<script th:inline="javascript">
+  let app = new Vue({
+    el     : '#app',
+    data   : {
+      account  : [[${account}]]
+    }
+  })
+</script>
+</body>
+</html>
