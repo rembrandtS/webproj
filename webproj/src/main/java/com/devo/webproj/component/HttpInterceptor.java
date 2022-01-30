@@ -22,10 +22,6 @@ public class HttpInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws IOException {
 
-        if(!request.isRequestedSessionIdValid()) {
-            response.sendError(900, "세션 만료! 로그인 페이지로 이동합니다.");
-            return false;
-        }
         return true;
     }
 

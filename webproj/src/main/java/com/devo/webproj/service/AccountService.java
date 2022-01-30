@@ -8,6 +8,9 @@ import com.devo.webproj.repository.AccountRepository;
 import com.devo.webproj.repository.dsl.AccountDslRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,6 +31,7 @@ public class AccountService extends AbstractService  {
                 ).orElse(userInfo);
     }
 
+    @Cacheable(value = "accountList")
     public List<AccountDTO> findAccountDTOsBySearchCondition(SearchAccountVO searchAccountVO) {
         return accountDslRepository.findAccountDTOsBySearchCondition(searchAccountVO);
     }
@@ -52,6 +56,9 @@ public class AccountService extends AbstractService  {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "accountList", allEntries=true),
+    })
     public AccountDTO saveAccount(AccountVO accountVO){
         return new AccountDTO(
                 accountRepository
@@ -62,6 +69,9 @@ public class AccountService extends AbstractService  {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "accountList", allEntries=true),
+    })
     public String deleteAccount(long id) {
         Account account = accountRepository
                 .findById(id)

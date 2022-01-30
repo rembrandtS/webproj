@@ -6,6 +6,7 @@ import com.devo.webproj.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/account")
 @RequiredArgsConstructor
+
 public class AccountController {
 
     private final AccountService accountService;
@@ -25,6 +27,7 @@ public class AccountController {
         return "account/login";
     }
 
+    @Secured("ADMIN")
     @GetMapping("/list")
     public String list(SearchAccountVO searchAccountVO, Model model) {
         model.addAttribute("accounts", accountService.findAccountDTOsBySearchCondition(searchAccountVO));

@@ -2,12 +2,12 @@ package com.devo.webproj.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-@Configuration
+@Component
 public class QuerydslConfig {
     @PersistenceContext
     private EntityManager em;

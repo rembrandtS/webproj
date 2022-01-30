@@ -32,8 +32,6 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        // 로그인 성공 때 처리 로직 작성
-
         setUserInfo(request);   // 세션에 로그인 사용자 정보 입력
         setTargetUrl(request, response);
     }

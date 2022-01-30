@@ -1,10 +1,13 @@
 package com.devo.webproj.config;
 
+import com.devo.webproj.handler.CustomAuthenticationFailureHandler;
+import com.devo.webproj.handler.CustomAuthenticationSuccessHandler;
 import com.devo.webproj.handler.CustomLogoutSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,20 +17,17 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
-
-@Component
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final DataSource dataSource;
-    private final AuthenticationSuccessHandler customSuccessHandler;
-    private final AuthenticationFailureHandler customFailureHandler;
+    private final CustomAuthenticationFailureHandler customFailureHandler;
+    private final CustomAuthenticationSuccessHandler customSuccessHandler;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     @Override
@@ -58,19 +58,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .maximumSessions(1) /* session 허용 갯수 */
             .expiredUrl("/account/login") /* session 만료 시 이동 페이지*/
             .maxSessionsPreventsLogin(false)
-            .sessionRegistry(sessionRegistry());
+            .sessionRegistry(new SessionRegistryImpl());
 
         http.cors().and().csrf().disable();
         http.headers().frameOptions().disable();
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
+    public void configureGlobal(AuthenticationManagerBuilder auth, @Lazy PasswordEncoder passwordEncoder)
             throws Exception {
 
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
+                .passwordEncoder(new BCryptPasswordEncoder())
                 .usersByUsernameQuery("select email as user_id, password, CASE WHEN enabled = 1 THEN true ELSE false END "
                         + "from account "
                         + "where email = ?")
