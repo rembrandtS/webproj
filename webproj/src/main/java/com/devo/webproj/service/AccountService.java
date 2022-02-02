@@ -24,6 +24,21 @@ public class AccountService extends AbstractService  {
     private final AccountDslRepository accountDslRepository;
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "accountList", allEntries=true),
+    })
+    public String deleteAccount(long id) {
+        Account account = accountRepository
+                .findById(id)
+                .orElseGet(Account::new);
+
+        if(account.getId() == 0)  return message.getMessage("system_accountService_deleteAccount_target.not.exist");
+
+        accountRepository.delete(account);
+        return message.getMessage("system_accountService_deleteAccount_deleted.target.and.go.to.list");
+    }
+
+    @Transactional
     public void setUserInfo(String email, String sessionId) {
         accountRepository
                 .findByEmail(email)
@@ -68,18 +83,4 @@ public class AccountService extends AbstractService  {
         );
     }
 
-    @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "accountList", allEntries=true),
-    })
-    public String deleteAccount(long id) {
-        Account account = accountRepository
-                .findById(id)
-                .orElseGet(Account::new);
-
-        if(account.getId() == 0)  return "삭제 대상이 존재하지 않습니다.";
-
-        accountRepository.delete(account);
-        return "대상을 삭제했습니다. 확인 후 목록 페이지로 이동합니다.";
-    }
 }

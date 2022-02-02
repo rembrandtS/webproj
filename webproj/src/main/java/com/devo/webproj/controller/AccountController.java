@@ -27,7 +27,6 @@ public class AccountController {
         return "account/login";
     }
 
-    @Secured("ADMIN")
     @GetMapping("/list")
     public String list(SearchAccountVO searchAccountVO, Model model) {
         model.addAttribute("accounts", accountService.findAccountDTOsBySearchCondition(searchAccountVO));
